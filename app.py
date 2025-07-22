@@ -14,10 +14,9 @@ def syllabus():
 
     prompt = f"You are a teacher. Create a {duration} syllabus for Grade {grade} on the subject '{subject}'. Break it down weekly."
 
-    print("Sending prompt to Ollama:", prompt)  # 🐛 DEBUG
-
+    print("Sending prompt to Ollama:", prompt)
     output = generate_response(prompt)
-    print("Output received:", output)  # 🐛 DEBUG
+    print("Output received:", output)
 
     return jsonify({"response": output})
 
@@ -33,4 +32,6 @@ def task_breakdown():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=False)
