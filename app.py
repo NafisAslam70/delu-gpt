@@ -6,6 +6,11 @@ import os
 app = Flask(__name__)
 CORS(app)  # Allow cross-origin requests (for frontend)
 
+@app.route("/")
+def index():
+    return "DELU-GPT is alive!"
+
+
 @app.route("/api/syllabus", methods=["POST"])
 def syllabus():
     data = request.json
