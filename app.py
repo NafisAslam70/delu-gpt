@@ -6,9 +6,16 @@ import os
 app = Flask(__name__)
 CORS(app)  # Allow cross-origin requests (for frontend)
 
-@app.route("/")
-def index():
-    return "DELU-GPT is alive!"
+@app.route("/", methods=["GET"])
+def landing():
+    return """
+    <h1>👋 Welcome to DELU-GPT</h1>
+    <p>This is a live API service for Meedian AI Flow.</p>
+    <p>To use, send a POST request to <code>/api/syllabus</code> with <code>{ "subject": ..., "grade": ... }</code></p>
+    <hr>
+    <p><strong>Status:</strong> Online ✅</p>
+    """, 200
+
 
 
 @app.route("/api/syllabus", methods=["POST"])
