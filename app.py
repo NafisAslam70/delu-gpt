@@ -32,7 +32,7 @@ def landing():
         <script>
             async function askGPT() {
                 const input = document.getElementById("userInput").value;
-                const response = await fetch('/api/ask', {
+                const response = await fetch('https://delu-gpt.onrender.com/api/ask', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt: input })
@@ -57,8 +57,6 @@ def ask():
     return jsonify({"response": output})
 
 
-
-
 @app.route("/api/syllabus", methods=["POST"])
 def syllabus():
     data = request.json
@@ -67,11 +65,7 @@ def syllabus():
     duration = data.get("duration", "3 months")
 
     prompt = f"You are a teacher. Create a {duration} syllabus for Grade {grade} on the subject '{subject}'. Break it down weekly."
-
-    print("Sending prompt to Ollama:", prompt)
     output = generate_response(prompt)
-    print("Output received:", output)
-
     return jsonify({"response": output})
 
 
