@@ -9,12 +9,53 @@ CORS(app)  # Allow cross-origin requests (for frontend)
 @app.route("/", methods=["GET"])
 def landing():
     return """
-    <h1>👋 Welcome to DELU-GPT</h1>
-    <p>This is a live API service for Meedian AI Flow.</p>
-    <p>To use, send a POST request to <code>/api/syllabus</code> with <code>{ "subject": ..., "grade": ... }</code></p>
-    <hr>
-    <p><strong>Status:</strong> Online ✅</p>
+    <html>
+    <head>
+        <title>DELU-GPT</title>
+        <style>
+            body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+            h1 { color: #2c3e50; }
+            input, button { padding: 10px; width: 100%; margin-top: 10px; }
+            #responseBox { margin-top: 20px; background: #f4f4f4; padding: 15px; border-radius: 5px; white-space: pre-wrap; }
+        </style>
+    </head>
+    <body>
+        <h1>👋 Welcome to DELU-GPT</h1>
+        <p>Ask anything below:</p>
+        <input type="text" id="userInput" placeholder="Type your question...">
+        <button onclick="askGPT()">Ask</button>
+        <div id="responseBox"></div>
+
+        <hr>
+        <p><strong>Backend API Status:</strong> Online ✅</p>
+
+        <script>
+            async function askGPT() {
+                const input = document.getElementById("userInput").value;
+                const response = await fetch('/api/ask', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: input })
+                });
+                const data = await response.json();
+                document.getElementById("responseBox").innerText = data.response || data.error || "No reply.";
+            }
+        </script>
+    </body>
+    </html>
     """, 200
+
+
+@app.route("/api/ask", methods=["POST"])
+def ask():
+    data = request.json
+    prompt = data.get("prompt")
+    if not prompt:
+        return jsonify({"error": "Prompt missing"}), 400
+
+    output = generate_response(prompt)
+    return jsonify({"response": output})
+
 
 
 
